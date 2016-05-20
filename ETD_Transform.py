@@ -163,6 +163,52 @@ def readETDs():
             if debugMode == '1':
                 print(str(rec['040']))
 
+            # Delete all call numbers in the MARC 050 or 090
+
+            # just for debugging - show any 050 values before deleting
+            if debugMode == '1':
+                display050Before =[]
+                callNumberBefore = rec.get_fields('050')
+                for ab in callNumberBefore:
+                    display050Before.append(ab.value())
+                print('050 before: '+str(display050Before))
+
+            try:
+                while len(rec.get_fields('050')) > 0:
+                    rec.remove_field(rec.get_fields('050')[0])
+            except IndexError:
+                pass
+
+            if debugMode == '1':
+                display050After =[]
+                callNumberAfter = rec.get_fields('050')
+                for ab in callNumberAfter:
+                    display050After.append(ab.value())
+                print('050 after : '+str(display050After))
+
+            # just for debugging - show any 090 values before deleting
+            if debugMode == '1':
+                display090Before = []
+                callNumberLocalBefore = rec.get_fields('090')
+                for ab in callNumberLocalBefore:
+                    display050Before.append(ab.value())
+                print('090 before: ' + str(display090Before))
+
+            try:
+                while len(rec.get_fields('090')) > 0:
+                    rec.remove_field(rec.get_fields('090')[0])
+            except IndexError:
+                pass
+
+            if debugMode == '1':
+                display090After = []
+                callNumberLocalAfter = rec.get_fields('090')
+                for ab in callNumberLocalAfter:
+                    display090After.append(ab.value())
+                print('090 after : ' + str(display090After))
+
+
+
             # update the MARC 100 field to add comma after the author and add $eauthor
 
             if debugMode == '1':
