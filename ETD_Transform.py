@@ -1,5 +1,8 @@
 from pymarc import *
 import csv
+import urllib
+from urllib import request
+from urllib import error
 import codecs
 import unicodedata
 import time
@@ -451,6 +454,26 @@ def readETDs():
             except IndexError:
                 pass
 
+            # I was requested to delete the 655_7 FAST subject headings. I don't agree with this so this might get axed
+
+            fastFields = rec.get_fields('650')
+            if debugMode == '1':
+                ffList = []
+                for ff in fastFields:
+                    ffList.append(str(ff))
+                print('650 list before: '+str(ffList))
+
+            for ff in fastFields:
+                if ff.indicator2 == '7':
+                    rec.remove_field(ff)
+
+            if debugMode == '1':
+                fastFieldsafter = rec.get_fields('650')
+                ffListAfter = []
+                for ff in fastFieldsafter:
+                    ffListAfter.append(str(ff))
+                print('650 list after : '+str(ffListAfter))
+
             # delete the 856
 
             # just for debugging - show any 856 values before deleting
@@ -521,6 +544,18 @@ def readETDs():
                     resultString = resultString+str(rec['245'].value())+'\t'+str(oldBib)+'\t'+str(rec['710'].value())+'\n'
                     with open(sevenTenReport, 'a') as x:
                         x.write(resultString)
+
+            # Test that the 856 field works
+
+            if debugMode == '1':
+                print('checking URL: '+str(purl))
+            try:
+                r = urllib.request.urlopen(purl)
+            except urllib.error.HTTPError:
+                urlProblemStr = str(purl) + '\t' + str(rec['100']['a']) + '\t' + str(oldBib)
+                print('\tfound potentially bad url at: ' + urlProblemStr)
+            if debugMode == '1':
+                print('\tdone checking URL')
 
 
             # delete the MARC 035, 001, 003, 005 values
