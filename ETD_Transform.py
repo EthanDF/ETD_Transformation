@@ -26,7 +26,7 @@ def readBib2Purl():
     '''read in list relating bibs to OCNs with pURLs and Abstracts
     list should contain Old Bib, OCL, PURL, Abstract'''
 
-    bib2Purl = 'Bib2Purls_batch2.csv'
+    bib2Purl = 'Bib2Purls.csv'
 
     checkList = []
     with open(bib2Purl, 'r', encoding='utf-8') as c:
@@ -108,14 +108,14 @@ def trailingPunct(Marcfield):
 def readETDs():
 
     # identify the old batch of marc files
-    marcFile = str('batch_2ocl.mrc')
-    outputFile = 'newMARC2.dat'
+    marcFile = str('batch3_ocl.mrc')
+    outputFile = 'newMARC3.dat'
     sevenTenReport = 'MARC_710_f_Report.txt'
 
     bib2PurlDict = readBib2Purl()
     sevenTenDict = read710()
 
-    debugMode = input("run in debug mode? If yes, enter '1'")
+    debugMode = input("run in debug mode? If yes, enter '1'\n")
     debugMode = str(debugMode)
 
     # start reading in the old marc files
@@ -411,22 +411,35 @@ def readETDs():
                     print('502 after: ' + str(displayf502after))
 
 
-            # check MARC 533 for "Photocopy"
+            # check MARC 533 for "Photocopy" - UPDATE: ALWAYS DELETE MARC 533
 
-            p = 'photocopy'
-            displayf2 = []
-            f2 = rec.get_fields('533')
+            # p = 'photocopy'
+            # displayf2 = []
+            # f2 = rec.get_fields('533')
+            #
+            # counter = 0
+            # for note2 in f2:
+            #     displayf2.append(note2.value())
+            #     if p in note2.value().lower():
+            #         if debugMode == '1':
+            #             print('found ')
+            #         rec.remove_field(rec.get_fields('533')[counter])
+            #     counter += 1
+            # if debugMode == '1':
+            #     print('533 before: '+str(displayf2))
 
-            counter = 0
-            for note2 in f2:
-                displayf2.append(note2.value())
-                if p in note2.value().lower():
-                    if debugMode == '1':
-                        print('found ')
-                    rec.remove_field(rec.get_fields('533')[counter])
-                counter += 1
             if debugMode == '1':
-                print('533 before: '+str(displayf2))
+                display533 =[]
+                Before533 = rec.get_fields('533')
+                for ab in Before533:
+                    display533.append(ab.value())
+                print('533 before: '+str(display533))
+
+            try:
+                while len(rec.get_fields('533')) > 0:
+                    rec.remove_field(rec.get_fields('533')[0])
+            except IndexError:
+                pass
 
             # display the 533 fields after removal of photocopy - can be commented out
             if debugMode == '1':
@@ -454,25 +467,25 @@ def readETDs():
             except IndexError:
                 pass
 
-            # I was requested to delete the 655_7 FAST subject headings. I don't agree with this so this might get axed
-
-            fastFields = rec.get_fields('650')
-            if debugMode == '1':
-                ffList = []
-                for ff in fastFields:
-                    ffList.append(str(ff))
-                print('650 list before: '+str(ffList))
-
-            for ff in fastFields:
-                if ff.indicator2 == '7':
-                    rec.remove_field(ff)
-
-            if debugMode == '1':
-                fastFieldsafter = rec.get_fields('650')
-                ffListAfter = []
-                for ff in fastFieldsafter:
-                    ffListAfter.append(str(ff))
-                print('650 list after : '+str(ffListAfter))
+            # # I was requested to delete the 655_7 FAST subject headings. I don't agree with this so this might get axed
+            #
+            # fastFields = rec.get_fields('650')
+            # if debugMode == '1':
+            #     ffList = []
+            #     for ff in fastFields:
+            #         ffList.append(str(ff))
+            #     print('650 list before: '+str(ffList))
+            #
+            # for ff in fastFields:
+            #     if ff.indicator2 == '7':
+            #         rec.remove_field(ff)
+            #
+            # if debugMode == '1':
+            #     fastFieldsafter = rec.get_fields('650')
+            #     ffListAfter = []
+            #     for ff in fastFieldsafter:
+            #         ffListAfter.append(str(ff))
+            #     print('650 list after : '+str(ffListAfter))
 
             # delete the 856
 
