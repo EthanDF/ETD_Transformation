@@ -108,8 +108,8 @@ def trailingPunct(Marcfield):
 def readETDs():
 
     # identify the old batch of marc files
-    marcFile = str('batch3_ocl.mrc')
-    outputFile = 'newMARC3.dat'
+    marcFile = str('batch4_ocl.mrc')
+    outputFile = 'newMARC4.dat'
     sevenTenReport = 'MARC_710_f_Report.txt'
 
     bib2PurlDict = readBib2Purl()
@@ -117,6 +117,7 @@ def readETDs():
 
     debugMode = input("run in debug mode? If yes, enter '1'\n")
     debugMode = str(debugMode)
+    print("running...\n")
 
     # start reading in the old marc files
     with open(marcFile, 'rb') as fh:
@@ -216,20 +217,29 @@ def readETDs():
 
             if debugMode == '1':
                 print(str(rec['100']))
-            rec['100']['a'] = str(rec['100']['a'] + ',')
+
+            # check that comma ends the subfield a
+            authorName = str(rec['100']['a'])
+            if authorName.rstrip()[-1:] != ',':
+                rec['100']['a'] = str(rec['100']['a'] + ',')
+
+            # check for a period proceeding the comma
+            authorName = str(rec['100']['a'])
+            if authorName.rstrip()[-2:-1] != '.':
+                rec['100']['a'] = str(rec['100']['a'])[:-1] + '.,'
             rec['100'].add_subfield('e', 'author.')
             if debugMode == '1':
                 print(str(rec['100']))
 
             # capture copyright create the MARC 264#1 field, the MARC 264#4 field and then remove the MARC 260
 
-            if debugMode == '1':
-                print(str(rec['260']))
-            # print MARC 264s
-            if debugMode == '1':
-                f = rec.get_fields('264')
-                for fs in f:
-                    print(str(fs))
+            # if debugMode == '1':
+            #     print(str(rec['260']))
+            # print MARC 264
+            # if debugMode == '1':
+            #     f = rec.get_fields('264')
+            #     for fs in f:
+            #         print(str(fs))
 
 
             # reset copyright date and publication date
