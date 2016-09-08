@@ -108,8 +108,8 @@ def trailingPunct(Marcfield):
 def readETDs():
 
     # identify the old batch of marc files
-    marcFile = str('batch4_ocl.mrc')
-    outputFile = 'newMARC4.dat'
+    marcFile = str('batch7_ocl.mrc')
+    outputFile = 'newMARC7.dat'
     sevenTenReport = 'MARC_710_f_Report.txt'
 
     bib2PurlDict = readBib2Purl()
@@ -543,7 +543,7 @@ def readETDs():
                 sevenTenValue = sevenTenDict[oldBib]
                 sevenTenValue = sevenTenValue.rstrip()
             except KeyError:
-                print('problem with oldBib: '+str(oldBib))
+                print('problem with 710s for oldBib: '+str(oldBib))
 
             # call to function to create MARC 710 field if 710 results is not '' (nothing)
             if sevenTenValue != '':
