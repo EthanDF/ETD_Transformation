@@ -26,7 +26,7 @@ def readBib2Purl():
     '''read in list relating bibs to OCNs with pURLs and Abstracts
     list should contain Old Bib, OCL, PURL, Abstract'''
 
-    bib2Purl = 'Bib2Purls.csv'
+    bib2Purl = 'CurrentBatchDocs\\Bib2Purls.csv'
 
     checkList = []
     with open(bib2Purl, 'r', encoding='utf-8') as c:
@@ -47,7 +47,7 @@ def readBib2Purl():
 def read710():
     '''read in list relating old bibs to 710 values so that the 710 can be written to the new record'''
 
-    bib2710 = 'Bib2710.csv'
+    bib2710 = 'CurrentBatchDocs\\Bib2710.csv'
 
     bibList = []
     with open(bib2710, 'r', encoding='utf-8') as c:
@@ -107,16 +107,21 @@ def trailingPunct(Marcfield):
 
 def readETDs():
 
+    debugMode = input("run in debug mode? If yes, enter '1'\n")
+    debugMode = str(debugMode)
+
+    batchNum = input("what is the batch number?\n")
+    batchNum = str(batchNum)
+
     # identify the old batch of marc files
-    marcFile = str('batch7_ocl.mrc')
-    outputFile = 'newMARC7.dat'
-    sevenTenReport = 'MARC_710_f_Report.txt'
+    marcFile = str('CurrentBatchDocs\\batch'+batchNum+'_ocl.mrc')
+    outputFile = 'CurrentBatchDocs\\newMARC'+batchNum+'.dat'
+    sevenTenReport = 'CurrentBatchDocs\\MARC_710_f_Report.txt'
 
     bib2PurlDict = readBib2Purl()
     sevenTenDict = read710()
 
-    debugMode = input("run in debug mode? If yes, enter '1'\n")
-    debugMode = str(debugMode)
+
     print("running...\n")
 
     # start reading in the old marc files
