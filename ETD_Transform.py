@@ -172,6 +172,33 @@ def readETDs():
             if debugMode == '1':
                 print(str(rec['040']))
 
+            # make sure 049 = FGME not FGMM
+
+            # just for debugging - show any 050 values before deleting
+
+            localHoldField = Field(tag='049', indicators=[' ', ' '], subfields=['a', 'FGME'])
+
+            if debugMode == '1':
+                display049Before = []
+                localHoldBefore = rec.get_fields('049')
+                for ab in localHoldBefore:
+                    display049Before.append(ab.value())
+                print('049 before: ' + str(display049Before))
+
+            try:
+                if rec['049']['a'] != 'FGME':
+                    rec.remove_field(rec.get_fields('049')[0])
+                    rec.add_field(localHoldField)
+            except IndexError:
+                pass
+
+            if debugMode == '1':
+                display049After = []
+                localHoldAfter = rec.get_fields('049')
+                for ab in localHoldAfter:
+                    display049After.append(ab.value())
+                print('049 after : ' + str(display049After))
+
             # Delete all call numbers in the MARC 050 or 090
 
             # just for debugging - show any 050 values before deleting
