@@ -26,7 +26,7 @@ def readBib2Purl():
     '''read in list relating bibs to OCNs with pURLs and Abstracts
     list should contain Old Bib, OCL, PURL, Abstract'''
 
-    bib2Purl = 'CurrentBatchDocs\\Bib2Purls.csv'
+    bib2Purl = 'Z:\\FenichelE\\ETD_Tranformation\\CurrentBatchDocs\\Bib2Purls.csv'
 
     checkList = []
     with open(bib2Purl, 'r', encoding='utf-8') as c:
@@ -47,7 +47,7 @@ def readBib2Purl():
 def read710():
     '''read in list relating old bibs to 710 values so that the 710 can be written to the new record'''
 
-    bib2710 = 'CurrentBatchDocs\\Bib2710.csv'
+    bib2710 = 'Z:\\FenichelE\\ETD_Tranformation\\CurrentBatchDocs\\Bib2710.csv'
 
     bibList = []
     with open(bib2710, 'r', encoding='utf-8') as c:
@@ -114,9 +114,9 @@ def readETDs():
     batchNum = str(batchNum)
 
     # identify the old batch of marc files
-    marcFile = str('CurrentBatchDocs\\batch'+batchNum+'_ocl.mrc')
-    outputFile = 'CurrentBatchDocs\\newMARC'+batchNum+'.dat'
-    sevenTenReport = 'CurrentBatchDocs\\MARC_710_f_Report.txt'
+    marcFile = str('Z:\\FenichelE\\ETD_Tranformation\\CurrentBatchDocs\\batch'+batchNum+'_ocl.mrc')
+    outputFile = 'Z:\\FenichelE\\ETD_Tranformation\\CurrentBatchDocs\\newMARC'+batchNum+'.dat'
+    sevenTenReport = 'Z:\\FenichelE\\ETD_Tranformation\\CurrentBatchDocs\\MARC_710_f_Report.txt'
 
     bib2PurlDict = readBib2Purl()
     sevenTenDict = read710()
@@ -557,7 +557,7 @@ def readETDs():
                 print(str(rec['520']))
 
             # declare and add MARC 856/PURL
-            marc856 = Field(tag='856', indicators=['4', '0'], subfields=['u', purl])
+            marc856 = Field(tag='856', indicators=['4', '0'], subfields=['z', 'Full text available:', 'u', purl])
             rec.add_field(marc856)
             if debugMode == '1':
                 print(str(rec['856']))
