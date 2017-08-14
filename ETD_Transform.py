@@ -189,6 +189,8 @@ def readETDs():
                 if rec['049']['a'] != 'FGME':
                     rec.remove_field(rec.get_fields('049')[0])
                     rec.add_field(localHoldField)
+                elif rec['049'] is None:
+                    rec.add_field(localHoldField)
             except IndexError:
                 pass
 
