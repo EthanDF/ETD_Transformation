@@ -416,6 +416,7 @@ def readETDs():
                     if debugMode == '1':
                         print('found ')
                     rec.remove_field(rec.get_fields('500')[counter])
+                    counter -= 1
                 counter += 1
             if debugMode == '1':
                 print('500 before: '+str(displayf))
